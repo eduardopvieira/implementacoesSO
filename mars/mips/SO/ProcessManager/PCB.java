@@ -1,16 +1,18 @@
 package mars.mips.SO.ProcessManager;
 
 import mars.mips.hardware.RegisterFile;
-import mars.mips.hardware.Register;
 
 public class PCB {
+    
     private int registersSize = 36;
     private int[] registerList = new int[registersSize];
-    
     private int initialAdress;
     private int PID;
-    private boolean estado;
+    private boolean estado; //true = ready, false = executando. trocar pra enum depois pq fica mt melhor
 
+    public PCB (int initialPC) {
+        this.initialAdress = initialPC;
+    }
 
     public void copyRegisters() {
         for (int i = 0; i < registersSize-1; i++) {
