@@ -41,7 +41,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *   @version June 2003
   **/
 
-    public  class RegisterFile {
+
+   public class RegisterFile {
    
       public static final int GLOBAL_POINTER_REGISTER = 28;
       public static final int STACK_POINTER_REGISTER = 29;
