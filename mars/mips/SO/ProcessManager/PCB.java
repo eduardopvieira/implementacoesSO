@@ -10,14 +10,17 @@ public class PCB {
     private int initialAdress;
     private int PID;
     private boolean estado;
+    
+    private static int count;
 
 
     public void copyRegisters() {
         for (int i = 0; i < registersSize-1; i++) {
+            if (i == 32) {
+                registerList[i] = RegisterFile.getProgramCounter();
+            }
             registerList[i] = RegisterFile.getValue(i);    
         }
-        
-        registerList[35] = RegisterFile.getProgramCounter();
     }
 
     public void writeRegisters() {
