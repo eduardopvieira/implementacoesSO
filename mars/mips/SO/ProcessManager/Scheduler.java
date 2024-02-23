@@ -1,9 +1,23 @@
 package mars.mips.SO.ProcessManager;
 
-import java.util.LinkedList;
-
 public class Scheduler {
-	public static void escalonar(LinkedList<PCB> ready) {
-		ProcessesTable.promoteProcess(ready.get(0));
+
+	public static void escalonar() {
+		
+		PCB processoExcutando = ProcessesTable.getPCB();
+		PCB proximoProcesso = ProcessesTable.proximoProcesso();
+
+		if (proximoProcesso != null){
+			ProcessesTable.setCurrentProcess(proximoProcesso);
+			proximoProcesso.writeRegisters();
+
+			if(processoExcutando != null){
+				ProcessesTable.addReady(processoExcutando);
+			}
+
+		} else {
+			ProcessesTable.removeReady(processoExcutando);
+		}
+
 	}
 }

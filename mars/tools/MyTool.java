@@ -40,7 +40,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
       private String name = "MyTool";
       private static String heading =  "My First Tool";
-		private static String version = "Version 1.0 (Ricardo_Paulo_Ben_Lucas)";
+		private static String version = "Version 1.0 (Eduardo_Antonio_Paulo_Karoline_Mikael_Victor)";
    	         	
    	/**
    	 * Simple constructor, likely used to run a stand-alone memory reference visualizer.

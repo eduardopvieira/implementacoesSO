@@ -1,6 +1,5 @@
 package mars.mips.instructions.syscalls;
 
-import mars.util.*;
 import mars.*;
 import mars.mips.hardware.*;
 import mars.mips.SO.ProcessManager.ProcessesTable;
@@ -14,36 +13,22 @@ public class SyscallProcessChange extends AbstractSyscall {
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-        // Salva o contexto do processo atual
-        saveContext();
-
-        // Chama o algoritmo de escalonamento para escolher um novo processo
-        Scheduler.escalonar(ProcessesTable.getReady());
 
         // Carrega o contexto do novo processo
-        loadContext(ProcessesTable.getCurrentProcess());
+        loadProcess(ProcessesTable.getPCB());
 
-        // Retorno à execução do novo processo
-        return;
+         // Chama o algoritmo de escalonamento para escolher um novo processo
+        RegisterFile.setProgramCounter(ProcessesTable.getPCB().getInitialAdress());
+
     }
 
-    private void saveContext() {
-        // Obtém o PC atual
-        int currentPC = RegisterFile.getProgramCounter();
-        
-        // Obtém os valores dos registradores e os salva no PCB do processo atual
-        PCB currentPCB = ProcessesTable.getCurrentProcess();
-        currentPCB.copyRegisters();
-        RegisterFile.setProgramCounter(currentPCB.getInitialAdress());
-    }
+    private void loadProcess(PCB newProcess) {
 
-    private void loadContext(PCB newProcess) {
-        // Carrega o PC do novo processo
-        RegisterFile.setProgramCounter(newProcess.getInitialAdress());
+        if (newProcess != null){
+            newProcess.copyRegisters();
+            newProcess.setInitialAdress(RegisterFile.getProgramCounter());
+        }
 
-        // Carrega os valores dos registradores do PCB do novo processo nos registradores físicos
-        // Exemplo:
-        RegisterFile.updateRegister(ProcessesTable.getPCB(), RegisterFile.getValue(getNumber(PID)));
-        // Repetir para todos os registradores que precisam ser carregados
+        Scheduler.escalonar();
     }
 }

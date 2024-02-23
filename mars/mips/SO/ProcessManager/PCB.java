@@ -4,12 +4,11 @@ import mars.mips.hardware.RegisterFile;
 
 public class PCB {
     
-    private int registersSize = 36;
+    private final int registersSize = 35;
     private int[] registerList = new int[registersSize];
     private int initialAdress;
     private int PID;
     
-    private static int count;
     private boolean estado; //true = ready, false = executando. trocar pra enum depois pq fica mt melhor
 
     public PCB (int initialPC) {
@@ -17,20 +16,22 @@ public class PCB {
     }
 
     public void copyRegisters() {
-        for (int i = 0; i < registersSize-1; i++) {
+        for (int i = 0; i < registersSize; i++) {
             if (i == 32) {
-                registerList[i] = RegisterFile.getProgramCounter();
+                registerList[32] = RegisterFile.getProgramCounter();
+            } else {
+                registerList[i] = RegisterFile.getValue(i);  
             }
-            registerList[i] = RegisterFile.getValue(i);    
+              
         }
     }
 
     public void writeRegisters() {
-        for (int i = 0; i < registersSize-1; i++) {
+        for (int i = 0; i < registersSize; i++) {
             RegisterFile.updateRegister(i, registerList[i]);    
         }
         
-        RegisterFile.initializeProgramCounter(registerList[35]);
+        //RegisterFile.initializeProgramCounter(registerList[32]);
     }
 
     public void setInitialAdress(int initialAdress) {

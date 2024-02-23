@@ -1,6 +1,8 @@
 package mars.mips.instructions.syscalls;
-import mars.util.*;
 import mars.*;
+import mars.mips.SO.ProcessManager.ProcessesTable;
+import mars.mips.SO.ProcessManager.Scheduler;
+
 
 public class SyscallProcessTerminate extends AbstractSyscall{
 
@@ -10,6 +12,10 @@ public class SyscallProcessTerminate extends AbstractSyscall{
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-        SystemIO.printString("Olá SyscallProcessTerminate!\n");
+
+        ProcessesTable.setCurrentProcess(null);
+
+        Scheduler.escalonar();
+
     }
 }
