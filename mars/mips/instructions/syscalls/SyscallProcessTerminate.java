@@ -14,8 +14,12 @@ public class SyscallProcessTerminate extends AbstractSyscall{
     public void simulate(ProgramStatement statement) throws ProcessingException {
 
         ProcessesTable.setCurrentProcess(null);
-
-        Scheduler.escalonar();
+		
+		if (!ProcessesTable.getReadyPrioridade().isEmpty()) {
+			Scheduler.escalonarFixa();
+		} else {
+			Scheduler.escalonarFIFO();
+		}
 
     }
 }

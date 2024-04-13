@@ -14,21 +14,12 @@ public class SyscallProcessChange extends AbstractSyscall {
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
 
-        // Carrega o contexto do novo processo
-        loadProcess(ProcessesTable.getPCB());
-
-         // Chama o algoritmo de escalonamento para escolher um novo processo
-        RegisterFile.setProgramCounter(ProcessesTable.getPCB().getLabel();
-
-    }
-
-    private void loadProcess(PCB newProcess) {
-
-        if (newProcess != null){
-            newProcess.copyRegisters();
-            newProcess.setLabel(RegisterFile.getProgramCounter());
+        if(!ProcessesTable.getReadyPrioridade().isEmpty()){
+            Scheduler.escalonarFixa();
+        } else {
+            Scheduler.escalonarFIFO();
         }
 
-        Scheduler.escalonar();
     }
+
 }
