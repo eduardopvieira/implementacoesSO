@@ -10,14 +10,15 @@ public class SyscallFork extends AbstractSyscall{
 	public SyscallFork() {
         super(60, "SyscallFork");
     }
-        
-
-        int initialPC = RegisterFile.getProgramCounter();
-
-        PCB novoPCB = new PCB(initialPC);
 
         @Override
         public void simulate(ProgramStatement statement) throws ProcessingException {
+            int Label = RegisterFile.getProgramCounter();
+
+            PCB novoPCB = new PCB();
+
+            novoPCB.setLabel(Label);
+
             ProcessesTable.addReady(novoPCB);
         }
 

@@ -6,13 +6,21 @@ public class PCB {
     
     private final int registersSize = 35;
     private int[] registerList = new int[registersSize];
-    private int initialAdress;
     private int PID;
-    
-    private boolean estado; //true = ready, false = executando. trocar pra enum depois pq fica mt melhor
+    private int Label;
 
-    public PCB (int initialPC) {
-        this.initialAdress = initialPC;
+    private Estado estado;
+    private int prioridade;
+
+    public PCB (){
+
+    }
+
+    public PCB (int PID, Estado estado, int Label, int prioridade) {
+        this.PID = PID;
+        this.estado = estado;
+        this.Label = Label;
+        this.prioridade = prioridade;
     }
 
     public void copyRegisters() {
@@ -34,18 +42,6 @@ public class PCB {
         //RegisterFile.initializeProgramCounter(registerList[32]);
     }
 
-    public void setInitialAdress(int initialAdress) {
-        if (initialAdress >= 0) {
-            this.initialAdress = initialAdress;
-        } else {
-            System.out.println("Erro: endereco menor que 0");
-        }
-    }
-
-    public int getInitialAdress() {
-        return this.initialAdress;    
-    }
-
     public void setPID(int PID) {
         if (PID >= 0) {
             this.PID = PID;
@@ -58,12 +54,45 @@ public class PCB {
         return this.PID;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
-    public boolean getEstado() {
+    public void estadoPronto(){
+        this.estado = Estado.PRONTO;
+    }
+
+    public void estadoExecutando(){
+        this.estado = Estado.EXECUTANDO;
+    }
+
+    public void estadoBloqueado(){
+        this.estado = Estado.BLOQUEADO;
+    }
+
+    public Estado getEstado() {
         return this.estado;
     }
+
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
+    }
+
+    public int getLabel() {
+        return Label;
+    }
+
+    public void setLabel(int Label) {
+        if (Label >= 0) {
+            this.Label = Label;
+        } else {
+            System.out.println("Erro: endereco menor que 0");
+        }
+    }
+
 }
 

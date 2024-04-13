@@ -18,7 +18,7 @@ public class SyscallProcessChange extends AbstractSyscall {
         loadProcess(ProcessesTable.getPCB());
 
          // Chama o algoritmo de escalonamento para escolher um novo processo
-        RegisterFile.setProgramCounter(ProcessesTable.getPCB().getInitialAdress());
+        RegisterFile.setProgramCounter(ProcessesTable.getPCB().getLabel();
 
     }
 
@@ -26,7 +26,7 @@ public class SyscallProcessChange extends AbstractSyscall {
 
         if (newProcess != null){
             newProcess.copyRegisters();
-            newProcess.setInitialAdress(RegisterFile.getProgramCounter());
+            newProcess.setLabel(RegisterFile.getProgramCounter());
         }
 
         Scheduler.escalonar();
