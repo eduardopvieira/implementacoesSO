@@ -13,8 +13,8 @@ public class ProcessesTable {
 	private static Map<Integer, LinkedList<PCB>> readyPrioridade = new HashMap<>();
 	
 
-	private static PCB currentProcess=null;
-	
+	private static PCB currentProcess=null;	
+
 	public static void resetar(){
 		ready = new LinkedList<>();
 		currentProcess = null;

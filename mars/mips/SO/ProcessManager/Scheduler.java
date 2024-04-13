@@ -14,7 +14,7 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 			
-			executarProximoProcesso(proximoProcesso);
+			executarProximoProcesso(proximoProcesso, processoExecutando);
 	
 			if (processoExecutando != null)
 			{
@@ -32,7 +32,7 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 			
-			executarProximoProcesso(proximoProcesso);
+			executarProximoProcesso(proximoProcesso, processoExecutando);
 				
 				if (processoExecutando != null) {
 					ProcessesTable.addReady(processoExecutando);
@@ -49,19 +49,21 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 			
-			executarProximoProcesso(proximoProcesso);
+			executarProximoProcesso(proximoProcesso, processoExecutando);
 			
 			if (processoExecutando != null) {
 				ProcessesTable.addReady(processoExecutando);
 			}
 		}
 	
-		private static void executarProximoProcesso(PCB proximoProcesso) {
-			if (proximoProcesso != null) {
-				ProcessesTable.setCurrentProcess(proximoProcesso);
-				proximoProcesso.estadoExecutando();
-				proximoProcesso.copyRegisters();
-				RegisterFile.setProgramCounter(ProcessesTable.getPCB().getLabel());
+		private static void executarProximoProcesso(PCB proxProcess, PCB currentProcess) {
+			if (proxProcess != null) {
+					currentProcess.estadoPronto();
+					currentProcess.copyRegisters();
+					currentProcess.setLabel(RegisterFile.getProgramCounter());
+					proxProcess.estadoExecutando();
+					proxProcess.copyRegisters();
+					RegisterFile.setProgramCounter(proxProcess.getLabel());
 			}
 		}
 	

@@ -14,11 +14,14 @@ public class SyscallProcessChange extends AbstractSyscall {
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
 
-        if(!ProcessesTable.getReadyPrioridade().isEmpty()){
-            Scheduler.escalonarFixa();
-        } else {
-            Scheduler.escalonarFIFO();
-        }
+        if (!ProcessesTable.getReadyPrioridade().isEmpty()) {			
+			Scheduler.escalonarFixa();
+		} else {
+			Scheduler.escalonarFIFO();
+		}
+        
+
+        
 
     }
 
