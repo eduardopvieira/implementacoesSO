@@ -100,7 +100,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    //////////////////////////////      ABSTRACT METHODS       ///////////////////////////
    //////////////////////////////////////////////////////////////////////////////////////
    
-       /**
+       public AbstractMarsToolAndApplication(String string) {
+        //TODO Auto-generated constructor stub
+      }
+
+      /**
    	  *  Required MarsTool method to return Tool name.  Must be defined by subclass.
    	  *  @return  Tool name.  MARS will display this in menu item.
    	  */

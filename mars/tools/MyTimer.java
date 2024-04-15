@@ -20,14 +20,14 @@ import mars.mips.hardware.Memory;
 public class MyTimer extends AbstractMarsToolAndApplication{
 	
 	private static final long serialVersionUID = 7693825262258672056L;
-	private static String name   = "Schedule Timer";
-	private static String version = "Version 1.0 (Artur S. Guedes, Ben Ariel França Martins, Caio Anderson Martins Moura, João Pedro Pereira Frutoso, Lucas Gabriel Oliveira da Silva, Ricardo Viana Marinho)";
-	private static String heading = "Change processes after a number os instructions";
+	private static String name   = "My Timer";
+	private static String version = "Version 0.1";
+	private static String heading = "";
 	
 	private static JTextField insertField;
 	private JTextField counterField;
 	private static JComboBox<String> schedulers;
-	private String[] options = {"Line Scheduler", "Priority Scheduler", "Lottery Scheduler"};
+	private String[] options = {"Escalonar Linear", "Escalonar Prioridade", "Escalonar Loteria"};
 	private static boolean open = false;
 	
 	private static int counter = 0;
@@ -37,7 +37,7 @@ public class MyTimer extends AbstractMarsToolAndApplication{
 	}
 	
 	public MyTimer() {
-		super(name + ", " + version, heading);
+		super(name + " " + version, heading);
 	}
 
 	@Override
@@ -73,14 +73,14 @@ public class MyTimer extends AbstractMarsToolAndApplication{
 		c.gridx = 1;
 		c.gridwidth = 2;
 		c.gridy = 1;
-		c.insets = new Insets(0, -30, 17, 0);
-		panel.add(new JLabel("Insert inst. number: "), c);
+		c.insets = new Insets(0, 0, 17, 0);
+		panel.add(new JLabel("Timer : "), c);
 		
 		c.insets = new Insets(0, 170, 17, 0);
 		c.gridx++;
-		panel.add(new JLabel("Instructions passed: "), c);
+		panel.add(new JLabel("Instruções passadas: "), c);
 		
-		c.insets = new Insets(0, 110, 0, 0);
+		c.insets = new Insets(0, 0, 0, 0);
 		c.gridy++;
 		panel.add(schedulers, c);
 		
@@ -112,19 +112,19 @@ public class MyTimer extends AbstractMarsToolAndApplication{
 		counterField.setText(String.valueOf(time));
 		
 		if (time == 0 && ProcessesTable.getPCB() != null && (updateCounter % 2) == 0) {				
-			if (schedulers.getSelectedItem() == "Line Scheduler") {
+			if (schedulers.getSelectedItem() == "Escalonar linear") {
 				Scheduler.escalonarFIFO();
 			}
-			if (schedulers.getSelectedItem() == "Priority Scheduler") {
+			if (schedulers.getSelectedItem() == "Escalonar Prioridade") {
 				Scheduler.escalonarFixa();
 			}
-			if (schedulers.getSelectedItem() == "Lottery Scheduler") {
+			if (schedulers.getSelectedItem() == "Escalonar Loteria") {
 				Scheduler.escalonarLoteria();
 			}
 		}
 	}
 	
-	public static boolean isEscalonando() {
+	public static boolean teste() {
 		if (open) {
 			return (counter % Integer.valueOf(insertField.getText()) == 0 && (updateCounter % 2 == 0));
 		} else {
@@ -136,7 +136,7 @@ public class MyTimer extends AbstractMarsToolAndApplication{
 		if (open) {
 			return (String) schedulers.getSelectedItem();
 		} else {
-			return "Line Scheduler";
+			return "Escalonar linear";
 		}
 	}
 	

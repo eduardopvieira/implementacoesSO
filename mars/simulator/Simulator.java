@@ -2,9 +2,12 @@
    import mars.*;
    import mars.venus.*;
    import mars.util.*;
-   import mars.mips.hardware.*;
+import mars.mips.SO.ProcessManager.ProcessesTable;
+import mars.mips.hardware.*;
    import mars.mips.instructions.*;
-   import java.util.*;
+import mars.tools.MyTimer;
+
+import java.util.*;
    import javax.swing.*;
    import java.awt.event.*;
 	
@@ -324,7 +327,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          
             while (statement != null) {
                pc = RegisterFile.getProgramCounter(); // added: 7/26/06 (explanation above)
-               RegisterFile.incrementPC();           	
+               if (!MyTimer.teste() || ProcessesTable.getPCB() == null) {
+                  RegisterFile.incrementPC();           	
+               }
             	// Perform the MIPS instruction in synchronized block.  If external threads agree
             	// to access MIPS memory and registers only through synchronized blocks on same 
             	// lock variable, then full (albeit heavy-handed) protection of MIPS memory and 
@@ -343,8 +348,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                             Exceptions.RESERVED_INSTRUCTION_EXCEPTION);
                      }
                      // THIS IS WHERE THE INSTRUCTION EXECUTION IS ACTUALLY SIMULATED!
-                     instruction.getSimulationCode().simulate(statement);
-                  	
+                     if (!MyTimer.teste() || ProcessesTable.getPCB() == null) {
+                        instruction.getSimulationCode().simulate(statement);
+                     }
                   	// IF statement added 7/26/06 (explanation above)
                      if (Globals.getSettings().getBackSteppingEnabled()) {
                         Globals.program.getBackStepper().addDoNothing(pc);

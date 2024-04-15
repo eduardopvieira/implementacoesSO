@@ -7,19 +7,19 @@ public class Scheduler {
 		public static void escalonarFixa() {
 			PCB processoExecutando = ProcessesTable.getPCB();
 			PCB proximoProcesso = ProcessesTable.addProxPrioridade();
-			
+
 			if (processoExecutando != null) {
 				processoExecutando.estadoPronto();
 				processoExecutando.copyRegisters();
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
-			
-			executarProximoProcesso(proximoProcesso, processoExecutando);
-	
-			if (processoExecutando != null)
-			{
-				ProcessesTable.addPrioridade(proximoProcesso);
-			}
+
+				executarProximoProcesso(proximoProcesso);
+
+			if (processoExecutando != null){
+				ProcessesTable.addPrioridade(processoExecutando);
+			}	
+				
 		}
 		
 		public static void escalonarLoteria() {
@@ -32,7 +32,7 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 			
-			executarProximoProcesso(proximoProcesso, processoExecutando);
+			executarProximoProcesso(proximoProcesso);
 				
 				if (processoExecutando != null) {
 					ProcessesTable.addReady(processoExecutando);
@@ -49,30 +49,20 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 			
-			executarProximoProcesso(proximoProcesso, processoExecutando);
+			executarProximoProcesso(proximoProcesso);
 			
 			if (processoExecutando != null) {
 				ProcessesTable.addReady(processoExecutando);
 			}
 		}
 	
-		private static void executarProximoProcesso(PCB proxProcess, PCB currentProcess) {
+		private static void executarProximoProcesso(PCB proxProcess) {
 			if (proxProcess != null) {
-					currentProcess.estadoPronto();
-					currentProcess.copyRegisters();
-					currentProcess.setLabel(RegisterFile.getProgramCounter());
-					proxProcess.estadoExecutando();
-					proxProcess.copyRegisters();
-					RegisterFile.setProgramCounter(proxProcess.getLabel());
+						ProcessesTable.setCurrentProcess(proxProcess);
+            proxProcess.estadoExecutando();
+            proxProcess.writeRegisters();
+            RegisterFile.setProgramCounter(ProcessesTable.getPCB().getLabel());
 			}
 		}
-	
-	
-		// Retorna true se houver processos prontos na fila da TabelaDeProcessos
-		public static boolean hasProcessosProntos() {
-			return ProcessesTable.getReady().size() > 0;
-		}
 
-		
-	
 }
