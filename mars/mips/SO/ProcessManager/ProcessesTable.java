@@ -1,63 +1,63 @@
 package mars.mips.SO.ProcessManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
 public class ProcessesTable {
 	private static final int prioridadeMaxima = 5;
-	private static Queue<PCB> ready;
-	private static Map<Integer, Queue<PCB>> readyPrioridade;
-	private static PCB currentProcess;
+	private static Map<Integer, LinkedList<PCB>> processosProntos;
+	private static PCB processoAtual;
 	
 
 	static {
-		readyPrioridade = new HashMap<>();
-		ready = new LinkedList<>();
-		currentProcess = null;
+		processosProntos = new HashMap<>();
+		processoAtual = null;
 		
 		// Inicializa as filas de prioridade
 		for (int prioridade = 0; prioridade <= prioridadeMaxima; prioridade++) {
-				readyPrioridade.put(prioridade, new LinkedList<>());
+			processosProntos.put(prioridade, new LinkedList<>());
 		}
+	}
 
-}
 	public static void resetar(){
-		ready = new LinkedList<>();
-		readyPrioridade = new HashMap<>();
-		currentProcess = null;
+		processosProntos = new HashMap<>();
+		for (int prioridade = 0; prioridade <= prioridadeMaxima; prioridade++) {
+			processosProntos.put(prioridade, new LinkedList<>());
+		}
+		processoAtual = null;
 	}
 
 	public static void addReady(PCB process) {
-		ready.add(process);
-	}
+        int prioridade = process.getPrioridade();
+        Queue<PCB> list = processosProntos.get(prioridade);
+		list.add(process);
+    }
 
 	public static Queue<PCB> getReady() {
-		return ready;
+		return processosProntos.get(0);
+	}
+
+	public static void removeReady() {
+		System.out.println(processoAtual);
+		processosProntos.get(processoAtual.getPrioridade()).remove(processoAtual);
+		processoAtual = null;
 	}
 
 	public static PCB getPCB() {
-		return currentProcess;
+		return processoAtual;
 	}
 
-	public static void setCurrentProcess(PCB currentProcess) {
-		ProcessesTable.currentProcess = currentProcess;
+	public static void setProcessoAtual(PCB processoAtual) {
+		if (processoAtual != null)
+			ProcessesTable.processoAtual = processoAtual;
 	}
-
-	public static void addPrioridade(PCB ready) {
-        int prioridade = ready.getPrioridade();
-        Queue<PCB> list = readyPrioridade.get(prioridade);
-        list.add(ready);
-				ProcessesTable.addReady(ready);
-    }
 
 	public static PCB addProxPrioridade() {
         for (int prioridadeMaior = prioridadeMaxima; prioridadeMaior >= 0; prioridadeMaior--) {
-            Queue<PCB> list = readyPrioridade.get(prioridadeMaior);
+            Queue<PCB> list = processosProntos.get(prioridadeMaior);
             if (!list.isEmpty()) {
                 return list.poll();
             }
@@ -66,26 +66,27 @@ public class ProcessesTable {
     }
 
 	public static PCB proximoProcesso(){
-		if(!ready.isEmpty()){
-			return ready.poll();
-		} else {
-			return null;
+		if(!processosProntos.get(0).isEmpty()){
+			return processosProntos.get(0).poll();
 		}
 		
+		return null;
 	}
 
 	public static PCB addProxLoteria() {
-        if (!ready.isEmpty()) {
-            List<PCB> listaDeReady = new ArrayList<>(ready);
-            int ind = new Random().nextInt(listaDeReady.size());
-            return listaDeReady.get(ind);
+        if (!processosProntos.get(0).isEmpty()) {
+            int ind = new Random().nextInt(processosProntos.get(0).size());
+
+			PCB processoSorteado = processosProntos.get(0).get(ind);
+            processosProntos.get(0).remove(processoSorteado);
+
+			return processoSorteado;
         } else {
             return null;
         }
     }
 
-	public static Map<Integer, Queue<PCB>> getReadyPrioridade() {
-		return readyPrioridade;
+	public static Map<Integer, LinkedList<PCB>> getprocessosProntos() {
+		return processosProntos;
 	}
-
 }

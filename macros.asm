@@ -7,7 +7,7 @@
 .end_macro
 
 
-.macro SyscallForkPrioridade(%endereco, %prioridade) 
+.macro SyscallFork(%endereco, %prioridade) 
     	li $v0,63
     	la $a0, %endereco
     	la $a1, %prioridade

@@ -10,17 +10,23 @@ public class PCB {
     private int Label;
 
     private Estado estado;
-    private int prioridade;
+    private int prioridade=0;
 
-    public PCB (){
-
-    }
+    public PCB (){}
 
     public PCB (int PID, Estado estado, int Label, int prioridade) {
         this.PID = PID;
         this.estado = estado;
         this.Label = Label;
         this.prioridade = prioridade;
+    }
+
+    // Caso não tenha prioridade
+    public PCB (int PID, Estado estado, int Label) {
+        this.PID = PID;
+        this.estado = estado;
+        this.Label = Label;
+        this.prioridade = 0;
     }
 
     public void copyRegisters() {

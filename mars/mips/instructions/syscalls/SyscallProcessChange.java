@@ -1,10 +1,7 @@
 package mars.mips.instructions.syscalls;
 
 import mars.*;
-import mars.mips.hardware.*;
 import mars.tools.MyTimer;
-import mars.mips.SO.ProcessManager.ProcessesTable;
-import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.Scheduler;
 public class SyscallProcessChange extends AbstractSyscall {
 
@@ -14,29 +11,24 @@ public class SyscallProcessChange extends AbstractSyscall {
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
+		String tipo = MyTimer.tipoEscalonador();
 
-			String tipo = MyTimer.tipoEscalonador();
+		switch (tipo) {
+			case "Escalonar linear":
+				Scheduler.escalonarFIFO();
+				System.out.println("Escalonar Linear");
+				break;
 
-			switch (tipo) {
-				case "Escalonar linear":
-					Scheduler.escalonarFIFO();
+			case "Escalonar Prioridade":
+				Scheduler.escalonarFixa();
+				break;
 
-					break;
-				case "Escalonar Prioridade":
-                    Scheduler.escalonarFixa();
+			case "Escalonar Loteria":
+				Scheduler.escalonarLoteria();
+				break;
 
-					break;
-				case "Escalonar Loteria":
-                    Scheduler.escalonarLoteria();
-
-					break;
-				default:
-                    Scheduler.escalonarFIFO();
-			}
-        
-
-        
-
+			default:
+				Scheduler.escalonarFIFO();
+		}
     }
-
 }
