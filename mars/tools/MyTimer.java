@@ -149,6 +149,7 @@ public class MyTimer extends AbstractMarsToolAndApplication{
 	@Override
 	protected void reset() {
 		counter = 0;
+		ProcessesTable.resetar();
 		updateDisplay();
 	}
 }

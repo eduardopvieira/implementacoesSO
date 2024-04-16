@@ -10,15 +10,12 @@ import java.util.Random;
 
 public class ProcessesTable {
 	private static final int prioridadeMaxima = 5;
-	private static Queue<PCB> ready;
-	private static Map<Integer, Queue<PCB>> readyPrioridade;
-	private static PCB currentProcess;
+	private static Queue<PCB> ready = new LinkedList<>();
+	private static Map<Integer, Queue<PCB>> readyPrioridade = new HashMap<>();
+	private static PCB currentProcess = null;
 	
 
 	static {
-		readyPrioridade = new HashMap<>();
-		ready = new LinkedList<>();
-		currentProcess = null;
 		
 		// Inicializa as filas de prioridade
 		for (int prioridade = 0; prioridade <= prioridadeMaxima; prioridade++) {
@@ -29,6 +26,9 @@ public class ProcessesTable {
 	public static void resetar(){
 		ready = new LinkedList<>();
 		readyPrioridade = new HashMap<>();
+		for (int prioridade = 0; prioridade <= prioridadeMaxima; prioridade++) {
+			readyPrioridade.put(prioridade, new LinkedList<>());
+		}
 		currentProcess = null;
 	}
 
