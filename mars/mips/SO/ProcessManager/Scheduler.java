@@ -6,7 +6,6 @@ public class Scheduler {
 
 		public static void escalonarFixa() {
 			PCB processoExecutando = ProcessesTable.getPCB();
-			PCB proximoProcesso = ProcessesTable.addProxPrioridade();
 
 			if (processoExecutando != null) {
 				processoExecutando.estadoPronto();
@@ -14,34 +13,35 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 
-				executarProximoProcesso(proximoProcesso);
-
 			if (processoExecutando != null){
 				ProcessesTable.addPrioridade(processoExecutando);
 			}	
+
+			PCB proximoProcesso = ProcessesTable.addProxPrioridade();
+			System.out.println(proximoProcesso.getPrioridade());
+			executarProximoProcesso(proximoProcesso);
 				
 		}
 		
 		public static void escalonarLoteria() {
 			PCB processoExecutando = ProcessesTable.getPCB();
-			PCB proximoProcesso = ProcessesTable.addProxLoteria();
 			
 			if (processoExecutando != null) {
 				processoExecutando.estadoPronto();
 				processoExecutando.copyRegisters();
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
-			
-			executarProximoProcesso(proximoProcesso);
 				
 				if (processoExecutando != null) {
 					ProcessesTable.addReady(processoExecutando);
 				}
+
+				PCB proximoProcesso = ProcessesTable.addProxLoteria();
+				executarProximoProcesso(proximoProcesso);
 			}
 		
 		public static void escalonarFIFO() {
 			PCB processoExecutando = ProcessesTable.getPCB();
-			PCB proximoProcesso = ProcessesTable.proximoProcesso();
 			
 			if (processoExecutando != null) {
 				processoExecutando.estadoPronto();
@@ -49,11 +49,13 @@ public class Scheduler {
 				processoExecutando.setLabel(RegisterFile.getProgramCounter());
 			}
 			
-			executarProximoProcesso(proximoProcesso);
-			
 			if (processoExecutando != null) {
 				ProcessesTable.addReady(processoExecutando);
 			}
+
+			PCB proximoProcesso = ProcessesTable.proximoProcesso();
+			executarProximoProcesso(proximoProcesso);
+
 		}
 	
 		private static void executarProximoProcesso(PCB proxProcess) {

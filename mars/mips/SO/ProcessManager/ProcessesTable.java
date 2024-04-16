@@ -9,7 +9,7 @@ import java.util.Queue;
 import java.util.Random;
 
 public class ProcessesTable {
-	private static final int prioridadeMaxima = 9;
+	private static final int prioridadeMaxima = 5;
 	private static Queue<PCB> ready;
 	private static Map<Integer, Queue<PCB>> readyPrioridade;
 	private static PCB currentProcess;
@@ -52,6 +52,7 @@ public class ProcessesTable {
         int prioridade = ready.getPrioridade();
         Queue<PCB> list = readyPrioridade.get(prioridade);
         list.add(ready);
+				ProcessesTable.addReady(ready);
     }
 
 	public static PCB addProxPrioridade() {
