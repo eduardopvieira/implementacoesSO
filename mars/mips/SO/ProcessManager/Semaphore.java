@@ -3,10 +3,10 @@ package mars.mips.SO.ProcessManager;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import mars.tools.MyTimer;
+import mars.mips.instructions.syscalls.SyscallProcessTerminate;
 
 public class Semaphore {
-  private int endereco;
+ 	private int endereco;
 	private int valor;
 	
 	private Queue<PCB> processosBloqueados = new LinkedList<>();
@@ -17,68 +17,43 @@ public class Semaphore {
 	}
 	
 	public void SemaphoreDown() {
-		System.out.println("Entrei no semaphore 0.1");
+		System.out.println("Valor do semáforo DOWN = " + this.valor);
+
 		if (this.valor > 0) {
-				System.out.println("Entrei no semaphore 0");
 				valor--;
 		} else if (valor == 0) {
-				System.out.println("Entrei no semaphore 1");
+				// Confere quem chamou o semaforo e o bloqueia
 				PCB processoEmExecucao = ProcessesTable.getPCB();
-				System.out.println("Entrei no semaphore 2");
-				ProcessesTable.setProcessoAtual(null);
-				System.out.println("Entrei no semaphore 3");
 				processoEmExecucao.estadoBloqueado();
-				System.out.println("Entrei no semaphore 4");
 				
+				// Adiciona o processo na fila de bloqueados
 				processosBloqueados.add(processoEmExecucao);
-				System.out.println("Entrei no semaphore 5");
-			
-				if (!MyTimer.teste()) {
-						System.out.println("Entrei no semaphore 6");
-						switch (MyTimer.tipoEscalonador()) {
-						case "Escalonar linear":
-						System.out.println("Entrei no semaphore 7");
-							Scheduler.escalonarFIFO();
-							
-							break;
-						case "Escalonar Prioridade":
-						System.out.println("Entrei no semaphore 8");
-							Scheduler.escalonarFixa();
-							
-							break;
-						case "Escalonar Loteria":
-						System.out.println("Entrei no semaphore 9");
-							Scheduler.escalonarLoteria();
-							
-							break;
-						default:
-							System.out.println("Tipo inválio!");
-					}
-			}
+
+				System.out.println("Novo processo bloqueado: " + processoEmExecucao);
+				//System.out.println("Processos bloqueados: " + processosBloqueados + "\n");
+
+				try {
+					SyscallProcessTerminate syscallProcessTerminate = new SyscallProcessTerminate();
+					syscallProcessTerminate.simulate(null);
+				} catch (Exception e) {
+					System.out.println("Erro ao realizar down no semáforo.");
+				}			
 		}
+		
 	}
 	
 	public void SemaphoreUp() {
-		if (processosBloqueados.isEmpty()) {
-			valor++;
-		} else {
-			switch (MyTimer.tipoEscalonador()) {
-        case "Escalonar linear":
-          Scheduler.escalonarFIFO();
-          System.out.println("Escalonar Linear");
-          break;
-  
-        case "Escalonar Prioridade":
-          Scheduler.escalonarFixa();
-          break;
-  
-        case "Escalonar Loteria":
-          Scheduler.escalonarLoteria();
-          break;
-  
-        default:
-          System.out.println("Tipo inválio!");
-      }
+		System.out.println("Valor do semáforo UP = " + this.valor);
+
+		valor++;
+		if (!processosBloqueados.isEmpty()) {
+			PCB processoDesbloqueado = processosBloqueados.poll();
+			processoDesbloqueado.estadoPronto();
+
+			System.out.println("Novo processo DESbloqueado: " + processoDesbloqueado);
+			//System.out.println("Processos bloqueados: " + processosBloqueados + "\n");
+
+			ProcessesTable.addReady(processoDesbloqueado);
 		}
 	}
 
@@ -105,4 +80,10 @@ public class Semaphore {
 	public void setProcessosBloqueados(Queue<PCB> processosBloqueados) {
 		this.processosBloqueados = processosBloqueados;
 	}
+
+	@Override
+	public String toString() {
+		return "Semaphore [processosBloqueados=" + processosBloqueados + "]";
+	}
+
 }

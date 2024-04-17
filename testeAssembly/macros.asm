@@ -35,25 +35,25 @@
 	syscall
 .end_macro
 
-.macro CreateSemaphore(%endereco_var)
+.macro SyscallCreateSemaphore(%endereco_var)
     la $a0, %endereco_var
     li $v0,63
 	syscall
 .end_macro
 
-.macro TerminateSemaphore(%endereco_var)
+.macro SyscallTerminateSemaphore(%endereco_var)
     la $a0, %endereco_var
     li $v0,64
 	syscall
 .end_macro
 
-.macro DownSemaphore(%endereco_var)
+.macro SyscallDownSemaphore(%endereco_var)
     la $a0, %endereco_var
     li $v0,66
 	syscall
 .end_macro
 
-.macro UpSemaphore(%endereco_var)
+.macro SyscallUpSemaphore(%endereco_var)
     la $a0, %endereco_var
     li $v0,65
 	syscall

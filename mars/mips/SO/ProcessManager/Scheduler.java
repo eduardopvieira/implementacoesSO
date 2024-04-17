@@ -11,7 +11,7 @@ public class Scheduler {
 		if (processoExecutando != null){
 			ProcessesTable.addReady(processoExecutando);
 		}	
-
+		System.out.println("Processos prontos: " + ProcessesTable.getprocessosProntos() + "\n");
 		PCB proximoProcesso = ProcessesTable.addProxPrioridade();
 		System.out.println("Processo escolhido: " + proximoProcesso + " com prioridade: " + proximoProcesso.getPrioridade() + "\n");
 		executarProximoProcesso(proximoProcesso);			

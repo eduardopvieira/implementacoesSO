@@ -15,15 +15,15 @@ public class SyscallFork extends AbstractSyscall{
         @Override
         public void simulate(ProgramStatement statement) throws ProcessingException {
             int Label = RegisterFile.getValue(4);
-            int prioridade = RegisterFile.getValue(5);
-            
-            PCB novopcb = new PCB();
-            novopcb.setLabel(Label);
+            int prioridade = RegisterFile.getValue(5);  
+
+            PCB novoPCB = new PCB();
+            novoPCB.setLabel(Label);
 
             String tipo = MyTimer.tipoEscalonador();
-            if (tipo.equals("Escalonar Prioridade")) novopcb.setPrioridade(prioridade);
+            if (tipo.equals("Escalonar Prioridade")) novoPCB.setPrioridade(prioridade);
 
-            ProcessesTable.addReady(novopcb);
+            ProcessesTable.addReady(novoPCB);
         }
 
         

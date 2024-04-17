@@ -19,11 +19,8 @@ public class SyscallDownSemaphore extends AbstractSyscall{
     int enderecoVar = RegisterFile.getValue(4);
     
     try {
-      System.out.println("entrei aqui no down");
       Semaphore semaphore = SemaphoreList.obterPorEndereco(enderecoVar);
-      System.out.println("entrei aqui no down 2");
       semaphore.SemaphoreDown();
-      System.out.println("entrei aqui no down 3");
     } catch (Exception e) {
         System.out.println("Erro ao realizar down no semáforo.");
         throw new ProcessingException();

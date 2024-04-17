@@ -7,7 +7,7 @@
 # buffer de dados compartilhado deve ser uma pilha 
 # lw e sw para inserir e remover do buffer (observar estado da pilha durante a execucao)
 
-	empty: .word 100
+	empty: .word 32
     full: .word 0
     mutex: .word 1
 
@@ -16,45 +16,47 @@
 		.space 128
 
 .text
-	CreateSemaphore(empty)#empty	
+	SyscallCreateSemaphore(empty)#empty	
 
-	CreateSemaphore(full)#full
+	SyscallCreateSemaphore(full)#full
 
-	CreateSemaphore(mutex)#mutex
+	SyscallCreateSemaphore(mutex)#mutex
 	
 	#criação dos processos com prioridade
-	SyscallFork(Producer, 1)
-	SyscallFork(Consumer, 2)
+	SyscallFork(Producer, 2)
+	SyscallFork(Consumer, 1)
 	#escalonando o primeiro processo
 	SyscallProcessChange
 	 
-	li $t2, 128
+	li $t2, -1
 		
 Producer:
-	move $t0, $zero #indice do array
-	move $t1, $zero #valor a ser inserido	
 	loop1:
-        DownSemaphore(empty)
-        DownSemaphore(mutex)
+        SyscallDownSemaphore(empty)
+        SyscallDownSemaphore(mutex)
+        
         sw $t1, buffer($t0)
-        addi $t0, $t0, 4 #passa para o proximo indice
         addi $t1, $t1, 1 #item $t1 incrementa mais 1
-        UpSemaphore(mutex)
-        UpSemaphore(full)	
+        addi $t0, $t0, 4 #passa para o proximo indice
+        
+        SyscallUpSemaphore(mutex)
+        SyscallUpSemaphore(full)	
        	beq $t0, $t2, fim1
 		SyscallProcessChange
 		j loop1
 	fim1:	SyscallProcessTerminate
            
 Consumer:
-	move $t0, $zero #indice do array
 	loop2:
-        DownSemaphore(full)
-        DownSemaphore(mutex)
-        UpSemaphore(mutex)
-        UpSemaphore(empty)
+        SyscallDownSemaphore(full)
+        SyscallDownSemaphore(mutex)
+        
         lw $a0, buffer($t0)
         addi $t0, $t0, 4 #passa para o proximo indice	
+        
+        SyscallUpSemaphore(mutex)
+        SyscallUpSemaphore(empty)
+        
         beq $t0, $t2, fim2
 		SyscallProcessChange
 		j loop2

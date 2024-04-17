@@ -20,7 +20,7 @@ public class SyscallCreateSemaphore extends AbstractSyscall {
     
     try{
       int valorVar = Memory.getInstance().get(enderecoVar, 4);
-      SemaphoreList.criarSemaphore(valorVar, enderecoVar);
+      SemaphoreList.criarSemaphore(enderecoVar, valorVar);
     } catch (Exception e){
       System.out.println("Erro ao criar semáforo.");
       throw new ProcessingException();

@@ -7,8 +7,8 @@ public class SemaphoreList {
   
   public static Queue<Semaphore> semaphores = new LinkedList<>();
 
-    public static void criarSemaphore(int valor, int endSemaphore) {
-        Semaphore semaphore = new Semaphore(valor, endSemaphore);
+    public static void criarSemaphore(int end, int valor) {
+        Semaphore semaphore = new Semaphore(end, valor);
         semaphores.add(semaphore);
     }
 

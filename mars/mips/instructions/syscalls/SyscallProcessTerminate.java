@@ -17,7 +17,7 @@ public class SyscallProcessTerminate extends AbstractSyscall{
 
 		System.out.println("-=- Terminate -=-");
         ProcessesTable.removeReady();
-		System.out.println(ProcessesTable.getprocessosProntos());
+		//System.out.println(ProcessesTable.getprocessosProntos());
 		
 		try {
 			String tipo = MyTimer.tipoEscalonador();
