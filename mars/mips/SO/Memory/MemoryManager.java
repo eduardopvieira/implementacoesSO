@@ -42,9 +42,7 @@ public abstract class MemoryManager {
                     pageFault();
                 }
             } else {
-                SystemIO.printString("Erro encontrado, acesso de página fora dos limites do processo" +
-                                    "\nLimites de endereço do processo: [" + currentProcess.getEndInicio() + ", " + currentProcess.getEndFim() + "]" +
-                                    "\nEndereço acessado: " + programCounter);
+                SystemIO.printString("Erro: Acesso de página fora dos limites [" + currentProcess.getEndInicio() + ", " + currentProcess.getEndFim() + "]");
             }
         } catch (NullPointerException nullPointerException) {
             pageFault();
