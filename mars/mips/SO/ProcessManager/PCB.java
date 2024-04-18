@@ -32,8 +32,6 @@ public class PCB {
         this.prioridade = 0;
     }
 
-    
-
     public void copyRegisters() {
         for (int i = 0; i < registersSize; i++) {
             if (i == 32) {
@@ -55,8 +53,6 @@ public class PCB {
     public void setPID(int PID) {
         if (PID >= 0) {
             this.PID = PID;
-        } else {
-            System.out.println("Erro: PID menor que 0");
         }
     }
 

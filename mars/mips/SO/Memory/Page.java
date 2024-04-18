@@ -2,31 +2,33 @@
 package mars.mips.SO.Memory;
 
 public class Page {
-    private int tamPage; // Tamanho da página
-    private int[] end; // Endereços da página
-    private int i = 0;
+    private int tamPage;
+    private int[] enderecos;
+    private int ultimaPosicao;
     private boolean read = false;
 
     public Page(int tamPage, int[] end) {
         this.tamPage = tamPage;
-        this.end = end;
+        this.enderecos = end;
+        ultimaPosicao = 0;
     }
 
     public Page(int tamPage) {
         this.tamPage = tamPage;
-        end = new int[this.tamPage];
+        enderecos = new int[this.tamPage];
+        ultimaPosicao = 0;
     }
 
     public int[] getEnd() {
-        return end;
+        return enderecos;
     }
 
     public boolean add(int endereco) {
-        if (!(i < tamPage)) {
+        if (!(ultimaPosicao < tamPage)) {
             return false;
         } else {
-            end[i] = endereco;
-            i++;
+            enderecos[ultimaPosicao] = endereco;
+            ultimaPosicao++;
         }
 
         return true;

@@ -12,14 +12,14 @@ import mars.mips.hardware.RegisterFile;
 import mars.util.SystemIO;
 
 public abstract class MemoryManager {
-    private static int tamPage = 3; // Tamanho da página
-    private static int valueMax = 15; // Quantidade máxima de páginas
-    private static Map<Integer, Integer> numProcess = new HashMap<>(); // Quantidade de páginas por processo
-    private static Map<Integer, List<Page>> pageProcess = new HashMap<>(); // Mapa de páginas por processo
-    private static String type = "FIFO"; // Algoritmo de substituição de páginas
-
-    // Todo system.out que está aqui tem o propósito de debuggar o código, 
-    // habilite-os para ver o que o programa está analisando naquele momento.
+    // Atributos globais
+    private static int tamPage = 3;
+    private static int quantBlocos = 15;
+    private static String alg = "FIFO";
+    
+    // Maps dos processos
+    private static Map<Integer, Integer> numProcess = new HashMap<>();
+    private static Map<Integer, List<Page>> pageProcess = new HashMap<>();
 
     public static void Page() {
         PCB currentProcess = ProcessesTable.getPCB();
@@ -35,12 +35,10 @@ public abstract class MemoryManager {
                         if (on.getEnd()[i] == programCounter) {
                             loaded = true;
                         }
-                        // System.out.println("comparacao: " + e.getAdress()[i] + " == " + pc + "?");
                     }
                 }
 
                 if (!loaded) {
-                    // System.out.println("Page Fault, reason: loaded = false");
                     pageFault();
                 }
             } else {
@@ -49,10 +47,8 @@ public abstract class MemoryManager {
                                     "\nEndereço acessado: " + programCounter);
             }
         } catch (NullPointerException nullPointerException) {
-            // System.out.println("Page Fault, reason: First page");
             pageFault();
         }
-        // System.out.println("___________Fim ensurePage___________");
     }
 
     public static Page pageFault() {
@@ -63,7 +59,6 @@ public abstract class MemoryManager {
         for (int i = 0; i < tamPage; i++) {
             if (currentProcess.inEnd(programCounter + (i * 4))) {
                 page.add(programCounter + (i * 4));
-                // System.out.println(pc + (i * 4) + ": " + pg.getAdress()[i]);
             } else {
                 page.add(-1);
             }
@@ -72,17 +67,15 @@ public abstract class MemoryManager {
         int id = currentProcess.getPID();
 
         if (!pageProcess.containsKey(id)) {
-            // System.out.println("Primeira página inserida");
             pageProcess.put(id, new ArrayList<>());
             numProcess.put(id, 1);
             pageProcess.get(id).add(page);
 
         } else {
             paginacao(page, currentProcess);
-            // System.out.println("Próxima página inserida");
         }
 
-        numProcess.replace(id, numProcess.get(id) % valueMax);
+        numProcess.replace(id, numProcess.get(id) % quantBlocos);
         return page;
     }
 
@@ -90,25 +83,17 @@ public abstract class MemoryManager {
         int id = processoAtual.getPID();
         numProcess.replace(id, numProcess.get(id) + 1);
 
-        switch (type) {
-            case "FIFO":
-
-                if (pageProcess.get(id).size() == numProcess.get(id) - 1) {
-                    pageProcess.get(id).add(pg);
-                } else {
-                    pageProcess.get(id).set(numProcess.get(id) - 1, pg);
-                }
-
-                break;
-        
-            default:
-                SystemIO.printString("Algoritmo de página não encontrado");
-
-                break;
+        if (alg == "FIFO"){
+            if (pageProcess.get(id).size() == numProcess.get(id) - 1) {
+                pageProcess.get(id).add(pg);
+            } else {
+                pageProcess.get(id).set(numProcess.get(id) - 1, pg);
+            }
+        } else {
+            SystemIO.printString("Algoritmo não definido");
         }
     }
 
-    // Getters e Setters
     public static int getTamanhoPg() {
         return tamPage;
     }
@@ -118,11 +103,11 @@ public abstract class MemoryManager {
     }
 
     public static int getQuantMax() {
-        return valueMax;
+        return quantBlocos;
     }
 
     public static void setQuantMax(int quantMax) {
-        MemoryManager.valueMax = quantMax;
+        MemoryManager.quantBlocos = quantMax;
     }
 
     public static Map<Integer, Integer> getNumProcess() {
@@ -141,11 +126,11 @@ public abstract class MemoryManager {
         MemoryManager.pageProcess = pageProcess;
     }
 
-    public static String getType() {
-        return type;
+    public static String getAlg() {
+        return alg;
     }
 
-    public static void setType(String type) {
-        MemoryManager.type = type;
+    public static void setAlg(String alg) {
+        MemoryManager.alg = alg;
     }    
 } 
