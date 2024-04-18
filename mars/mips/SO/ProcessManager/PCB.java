@@ -9,6 +9,9 @@ public class PCB {
     private int PID;
     private int Label;
 
+    private int endInicio = 0; // Limite Superior
+    private int endFim = 0; // Limite Inferior
+
     private Estado estado;
     private int prioridade=0;
 
@@ -29,6 +32,8 @@ public class PCB {
         this.prioridade = 0;
     }
 
+    
+
     public void copyRegisters() {
         for (int i = 0; i < registersSize; i++) {
             if (i == 32) {
@@ -45,7 +50,6 @@ public class PCB {
             RegisterFile.updateRegister(i, registerList[i]);    
         }
         
-        //RegisterFile.initializeProgramCounter(registerList[32]);
     }
 
     public void setPID(int PID) {
@@ -99,6 +103,39 @@ public class PCB {
             System.out.println("Erro: endereco menor que 0");
         }
     }
+
+    public int getRegistersSize() {
+        return registersSize;
+    }
+
+    public int[] getRegisterList() {
+        return registerList;
+    }
+
+    public void setRegisterList(int[] registerList) {
+        this.registerList = registerList;
+    }
+
+    public int getEndInicio() {
+        return endInicio;
+    }
+
+    public void setEndInicio(int endInicio) {
+        this.endInicio = endInicio;
+    }
+
+    public boolean inEnd(int end) {
+        return (endFim >= end && end >= endInicio);
+    }
+
+    public int getEndFim() {
+        return endFim;
+    }
+
+    public void setEndFim(int endFim) {
+        this.endFim = endFim;
+    }
+    
 
 }
 

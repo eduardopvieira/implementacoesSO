@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import mars.mips.SO.ProcessManager.Scheduler;
+import mars.mips.SO.Memory.MemoryManager;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
@@ -98,6 +99,7 @@ public class MyTimer extends AbstractMarsToolAndApplication{
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		if (ProcessesTable.getPCB() != null) {
 			MyTimer.counter++;
+			MemoryManager.Page();
 		}
 		updateDisplay();
 	}
