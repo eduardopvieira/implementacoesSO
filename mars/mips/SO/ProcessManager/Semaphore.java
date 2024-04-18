@@ -50,7 +50,7 @@ public class Semaphore {
 			PCB processoDesbloqueado = processosBloqueados.poll();
 			processoDesbloqueado.estadoPronto();
 
-			System.out.println("Novo processo DESbloqueado: " + processoDesbloqueado);
+			System.out.println("Novo processo Desbloqueado: " + processoDesbloqueado);
 			//System.out.println("Processos bloqueados: " + processosBloqueados + "\n");
 
 			ProcessesTable.addReady(processoDesbloqueado);
