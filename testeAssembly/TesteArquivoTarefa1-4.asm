@@ -16,16 +16,16 @@
 		.space 128
 
 .text
+	# Criacao dos semaforos
 	SyscallCreateSemaphore(empty)#empty	
-
 	SyscallCreateSemaphore(full)#full
-
 	SyscallCreateSemaphore(mutex)#mutex
 	
-	#criação dos processos com prioridade
+	# Criação dos processos com prioridade
 	SyscallFork(Producer, 2)
 	SyscallFork(Consumer, 1)
-	#escalonando o primeiro processo
+
+	# Escalonando o primeiro processo
 	SyscallProcessChange
 	 
 	li $t2, -1
@@ -35,13 +35,17 @@ Producer:
         SyscallDownSemaphore(empty)
         SyscallDownSemaphore(mutex)
         
+		# Novo elemento no buffer
         sw $t1, buffer($t0)
         addi $t1, $t1, 1 #item $t1 incrementa mais 1
         addi $t0, $t0, 4 #passa para o proximo indice
         
         SyscallUpSemaphore(mutex)
         SyscallUpSemaphore(full)	
+
+		# Loop infinito
        	beq $t0, $t2, fim1
+
 		SyscallProcessChange
 		j loop1
 	fim1:	SyscallProcessTerminate
@@ -51,13 +55,16 @@ Consumer:
         SyscallDownSemaphore(full)
         SyscallDownSemaphore(mutex)
         
+		# Consumo do elemento no buffer
         lw $a0, buffer($t0)
         addi $t0, $t0, 4 #passa para o proximo indice	
         
         SyscallUpSemaphore(mutex)
         SyscallUpSemaphore(empty)
         
+		# Loop infinito
         beq $t0, $t2, fim2
+		
 		SyscallProcessChange
 		j loop2
 	fim2:	SyscallProcessTerminate
