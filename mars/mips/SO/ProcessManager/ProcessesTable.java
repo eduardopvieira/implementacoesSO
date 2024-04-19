@@ -12,13 +12,8 @@ public class ProcessesTable {
 		ready.add(process);
 	}
 	
-	public static boolean removeReady(PCB process) {
-		if(!ready.remove(process)) {
-			System.out.println("Erro: processo não faz parte da lista");
-			return false;	
-		}
-		
-		return true;
+	public static void removeReady() {
+		ready.remove(currentProcess.getInitialAdress());
 	}
 
 	public static LinkedList<PCB> getReady() {
@@ -41,15 +36,5 @@ public class ProcessesTable {
 	public static void setCurrentProcess(PCB currentProcess) {
 		ProcessesTable.currentProcess = currentProcess;
 	}
-
-
-	public static void promoteProcess(PCB process) {
-		if(removeReady(process)) {
-			ready.add(getPCB());
-			currentProcess = process;
-		} else
-			System.out.println("Erro: processo não faz parte da lista");		
-	}
-
 
 }

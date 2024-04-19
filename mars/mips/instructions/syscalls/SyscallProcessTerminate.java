@@ -2,6 +2,7 @@ package mars.mips.instructions.syscalls;
 import mars.*;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
+import mars.mips.hardware.RegisterFile;
 
 
 public class SyscallProcessTerminate extends AbstractSyscall{
@@ -13,7 +14,7 @@ public class SyscallProcessTerminate extends AbstractSyscall{
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
 
-        ProcessesTable.setCurrentProcess(null);
+        ProcessesTable.removeReady();
 
         Scheduler.escalonar();
 
